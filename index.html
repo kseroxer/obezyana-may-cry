@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fran's site style - Angelo</title>
     <style>
-        /* СТРОГИЙ СТИЛЬ DMC/RESIDENT EVIL */
         body {
             background-color: #0d0101;
             color: #ffffff;
@@ -26,16 +25,25 @@
             display: flex;
             justify-content: flex-end;
             margin-bottom: 8px;
+            gap: 10px;
         }
 
-        .top-login-btn {
+        .top-login-btn, .mute-btn {
             background: linear-gradient(to bottom, #555, #222);
             border: 1px solid #444;
             border-radius: 12px;
             color: #ccc;
-            padding: 6px 20px;
+            padding: 6px 15px;
             font-size: 13px;
             font-family: Arial, sans-serif;
+            cursor: pointer;
+        }
+
+        .mute-btn {
+            display: none;
+            background: linear-gradient(to bottom, #8B0000, #330000);
+            border-color: #550000;
+            color: #fff;
         }
 
         .main-window {
@@ -47,7 +55,6 @@
             box-sizing: border-box;
         }
 
-        /* ЭКРАН ВВОДА КОДА */
         .auth-panel {
             padding: 60px 20px;
             text-align: center;
@@ -92,7 +99,6 @@
             visibility: hidden;
         }
 
-        /* ГЛАВНЫЙ ИНТЕРФЕЙС ПРОФИЛЯ */
         .profile-interface {
             display: none;
             flex-direction: row;
@@ -100,7 +106,6 @@
             width: 100%;
         }
 
-        /* ЛЕВАЯ СТРОНА (ФОТО + СТАТЫ) */
         .left-column {
             flex: 1;
             min-width: 260px;
@@ -125,6 +130,9 @@
             background-color: #050505;
             overflow: hidden;
             margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .char-img-box img {
@@ -140,7 +148,6 @@
             line-height: 1.4;
         }
 
-        /* СТАТЫ ОДИН В ОДИН С ТОЧКАМИ */
         .rpg-stat-line {
             display: flex;
             justify-content: space-between;
@@ -148,11 +155,10 @@
             margin-bottom: 6px;
             letter-spacing: 1px;
         }
-        .stat-name { color: #ffffff; }
+        .stat-name { color: #ffffff; width: 40px; }
         .stat-dots { color: #ffffff; flex-grow: 1; text-align: left; padding-left: 5px; }
         .stat-num { color: #ffffff; }
 
-        /* ПРАВАЯ СТОРОНА (ТАБЛИЦЫ ДАННЫХ) */
         .right-column {
             flex: 1.4;
             min-width: 320px;
@@ -189,14 +195,12 @@
             border-bottom: 1px solid #8B0000;
             line-height: 1.4;
             color: #ffffff;
-            background-color: #030000;
         }
 
         .opinion-table {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            flex-grow: 1;
         }
 
         .opinion-table th {
@@ -220,17 +224,70 @@
             line-height: 1.5;
             color: #ffffff;
             border-right: 1px solid #8B0000;
-            background-color: #000000;
         }
 
         .opinion-table td:last-child {
             border-right: none;
         }
+
+        .interactive-zone {
+            padding: 15px;
+            background-color: #050000;
+            border-top: 1px solid #8B0000;
+            margin-top: auto;
+        }
+
+        .creator-title {
+            font-size: 11px;
+            color: #8B0000;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .custom-entry-input {
+            flex-grow: 1;
+            background-color: #000;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 5px;
+            font-family: monospace;
+            font-size: 11px;
+        }
+
+        .add-btn {
+            background-color: #330000;
+            border: 1px solid #8B0000;
+            color: #ffcccc;
+            padding: 4px 10px;
+            font-size: 11px;
+            cursor: pointer;
+            font-family: monospace;
+        }
+
+        .add-btn:hover {
+            background-color: #660000;
+        }
+
+        .add-btn:disabled {
+            background-color: #111;
+            border-color: #222;
+            color: #555;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
 
+    <audio id="bg-music" loop src="https://open.audio/api/v1/listen/tracks/6dd59954-4632-4752-b883-9b935a420ee9/"></audio>
+
     <div class="top-bar">
+        <button class="mute-btn" id="mute-btn" onclick="toggleMute()">MUTE AUDIO</button>
         <button class="top-login-btn" id="top-btn">log in | sign up</button>
     </div>
 
@@ -249,16 +306,16 @@
             <div class="left-column">
                 <div class="select-char-title">select character</div>
                 <div class="char-img-box">
-                    <img src="https://raw.githubusercontent.com/Annihilator/DMC3-Assets/main/dante_profile.jpg" alt="Dante DMC3">
+                    <img src="https://images2.imgbox.com/65/59/uT0m19Uo_o.jpg" alt="Dante DMC3">
                 </div>
-                <div class="profile-tag">
-                    @angelo's<br>profile
+                <div class="profile-tag" id="profile-tag-name">
+                    @Chaos699's<br>profile
                 </div>
                 
-                <div class="rpg-stat-line"><span class="stat-name">HP</span><span class="stat-dots">. . . .</span><span class="stat-num">150</span></div>
-                <div class="rpg-stat-line"><span class="stat-name">DF</span><span class="stat-dots">. . . .</span><span class="stat-num">068</span></div>
-                <div class="rpg-stat-line"><span class="stat-name">EXP</span><span class="stat-dots">. . . .</span><span class="stat-num">003</span></div>
-                <div class="rpg-stat-line"><span class="stat-name">ATK</span><span class="stat-dots">. . . .</span><span class="stat-num">175</span></div>
+                <div class="rpg-stat-line"><span class="stat-name">HP</span><span class="stat-dots">. . . .</span><span class="stat-num">696 / 999</span></div>
+                <div class="rpg-stat-line"><span class="stat-name">DF</span><span class="stat-dots">. . . .</span><span class="stat-num">069 / 999</span></div>
+                <div class="rpg-stat-line"><span class="stat-name">EXP</span><span class="stat-dots">. . . .</span><span class="stat-num">009 / 999</span></div>
+                <div class="rpg-stat-line"><span class="stat-name">ATK</span><span class="stat-dots">. . . .</span><span class="stat-num">169 / 999</span></div>
             </div>
 
             <div class="right-column">
@@ -279,20 +336,42 @@
                         <th>dislikes</th>
                     </tr>
                     <tr>
-                        <td>
+                        <td id="likes-cell">
                             red, motorbikes,<br>strenght, meat,<br>fights, muscles,<br>metal, punk,<br>videogames, animanga
                         </td>
-                        <td>
+                        <td id="dislikes-cell">
                             sensitive people,<br>trends, vegetables,<br>literature, trumpies,<br>nazis and fascists,<br>bugs
                         </td>
                     </tr>
                 </table>
+
+                <div class="interactive-zone">
+                    <div class="creator-title">🔒 CUSTOM LOG INJECTOR (LIMIT: 3)</div>
+                    
+                    <div class="input-row">
+                        <input type="text" id="like-input" class="custom-entry-input" placeholder="Add custom like...">
+                        <button id="like-btn" class="add-btn" onclick="addItem('likes')">Add Like</button>
+                    </div>
+                    
+                    <div class="input-row">
+                        <input type="text" id="dislike-input" class="custom-entry-input" placeholder="Add custom dislike...">
+                        <button id="dislike-btn" class="add-btn" onclick="addItem('dislikes')">Add Dislike</button>
+                    </div>
+                </div>
+
             </div>
 
         </div>
     </div>
 
     <script>
+        // НАСТРОЙКА ТЕЛЕГРАМ-БОТА (ЗАМЕНИ НА СВОИ ДАННЫЕ)
+        const TG_TOKEN = "СЮДА_ВСТАВЬ_ТОКЕН_ОТ_BOTFATHER"; 
+        const TG_CHAT_ID = "СЮДА_ВСТАВЬ_ТВОЙ_ID"; 
+
+        var myAudio = document.getElementById("bg-music");
+        myAudio.volume = 0.4; 
+
         function checkAccess() {
             var val = document.getElementById('pass-field').value.trim().toLowerCase();
             var err = document.getElementById('error-alert');
@@ -301,8 +380,55 @@
                 document.getElementById('auth-panel').style.display = 'none';
                 document.getElementById('profile-interface').style.display = 'flex';
                 document.getElementById('top-btn').innerText = 'welcome';
+                document.getElementById('mute-btn').style.display = 'block';
+                
+                myAudio.play().catch(function(error) {
+                    console.log("Autoplay blocked: " + error);
+                });
             } else {
                 err.style.visibility = 'visible';
+            }
+        }
+
+        function toggleMute() {
+            if (myAudio.paused) {
+                myAudio.play();
+                document.getElementById('mute-btn').innerText = "MUTE AUDIO";
+            } else {
+                myAudio.pause();
+                document.getElementById('mute-btn').innerText = "PLAY AUDIO";
+            }
+        }
+
+        var counts = { likes: 0, dislikes: 0 };
+
+        function addItem(type) {
+            if (counts[type] >= 3) return;
+
+            var inputId = type === 'likes' ? 'like-input' : 'dislike-input';
+            var btnId = type === 'likes' ? 'like-btn' : 'dislike-btn';
+            var cellId = type === 'likes' ? 'likes-cell' : 'dislikes-cell';
+
+            var inputEl = document.getElementById(inputId);
+            var text = inputEl.value.trim();
+
+            if (text !== "") {
+                var cell = document.getElementById(cellId);
+                cell.innerHTML += ",<br>" + text;
+                
+                // Отправка уведомления тебе в Telegram-бот
+                var message = `🔔 Анжело добавил кастомный ${type === 'likes' ? 'ЛАЙК' : 'ДИЗЛАЙК'}:\n👉 "${text}"`;
+                var url = `https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${TG_CHAT_ID}&text=${encodeURIComponent(message)}`;
+                
+                fetch(url).catch(err => console.log('TG error:', err));
+
+                inputEl.value = "";
+                counts[type]++;
+
+                if (counts[type] >= 3) {
+                    document.getElementById(btnId).disabled = true;
+                    document.getElementById(btnId).innerText = "LOCKED";
+                }
             }
         }
     </script>
