@@ -21,7 +21,7 @@
 
         .top-bar {
             width: 100%;
-            max-width: 760px;
+            max-width: 1000px;
             display: flex;
             justify-content: flex-end;
             margin-bottom: 8px;
@@ -50,7 +50,7 @@
             border: 1px solid #8B0000;
             background-color: #000000;
             width: 100%;
-            max-width: 760px;
+            max-width: 1000px;
             box-shadow: 0 0 20px rgba(139, 0, 0, 0.2);
             box-sizing: border-box;
             min-height: 380px;
@@ -278,47 +278,161 @@
             background-color: #660000;
         }
 
-        /* Стиль для секретной Главной Страницы */
+        /* --- СТИЛИ ДЛЯ СЕКРЕТНОЙ ГЛАВНОЙ СТРАНИЦЫ (WELCOME) --- */
         .main-page-interface {
             display: none;
-            padding: 40px 20px;
-            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            background-color: #050000;
+            gap: 20px;
+        }
+
+        .welcome-left {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: auto;
+            gap: 15px;
         }
 
-        .main-page-title {
-            color: #8B0000;
-            font-size: 24px;
-            margin-bottom: 20px;
-            letter-spacing: 3px;
+        .welcome-right {
+            flex: 2.5;
+            min-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding-right: 5px;
         }
 
-        .main-page-text {
-            font-size: 14px;
-            line-height: 1.6;
-            max-width: 500px;
-            color: #cccccc;
-            margin-bottom: 30px;
+        /* Кастомный скроллбар */
+        .welcome-right::-webkit-scrollbar {
+            width: 6px;
+        }
+        .welcome-right::-webkit-scrollbar-track {
+            background: #000;
+        }
+        .welcome-right::-webkit-scrollbar-thumb {
+            background: #8B0000;
         }
 
-        .back-btn {
-            background-color: #111111;
+        /* Системные окна в стиле 2000х */
+        .sys-window {
             border: 1px solid #8B0000;
-            color: #8B0000;
-            padding: 10px 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            background-color: #000000;
+            display: flex;
+            flex-direction: column;
         }
 
-        .back-btn:hover {
-            background-color: #220000;
+        .sys-title {
+            background-color: #8B0000;
             color: #ffffff;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sys-body {
+            padding: 12px;
+        }
+
+        /* Навигация */
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-list li a {
+            color: #ffcccc;
+            text-decoration: none;
+            font-size: 13px;
+            display: block;
+            padding: 6px 4px;
+            border-bottom: 1px dashed #330000;
+        }
+        .nav-list li a:hover {
+            background-color: #330000;
+            color: #ffffff;
+        }
+
+        /* Табы для досье */
+        .tab-header {
+            display: flex;
+            background-color: #111;
+            border-bottom: 1px solid #8B0000;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 8px 12px;
+            font-family: monospace;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .tab-btn.active {
+            background-color: #000;
+            color: #ff0000;
+            border-bottom: 2px solid #ff0000;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+            padding: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Стили для игр */
+        .game-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 6px 0;
+            border-bottom: 1px solid #150000;
+        }
+        .game-title { color: #ffffff; }
+        .game-status { color: #ff0000; font-weight: bold; font-size: 11px; }
+        
+        .co-op-section {
+            margin-top: 10px;
+            border-top: 1px dashed #8B0000;
+            padding-top: 10px;
+        }
+
+        /* Скрытый текст (Зашифрованные логи) */
+        .classified-item {
+            margin-bottom: 10px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .spoiler {
+            background-color: #ffffff;
+            color: #ffffff;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+        .spoiler:hover {
+            background-color: transparent;
+            color: #ff3333;
+        }
+
+        /* Стили виджета Spotify */
+        .spotify-container {
+            border: 1px solid #8B0000;
+            background: #000;
         }
     </style>
 </head>
@@ -395,12 +509,134 @@
         </div>
 
         <div id="main-page-interface" class="main-page-interface">
-            <div class="main-page-title">WELCOME TO CHAOS SYSTEM</div>
-            <div class="main-page-text">
-                Ты успешно взломал систему, Анжело.<br><br>
-                Музыка рубит, боты работают, база данных обновлена. Здесь ты можешь написать любой текст, который он увидит, когда перейдет по кнопке WELCOME!
+            
+            <div class="welcome-left">
+                <div class="sys-window">
+                    <div class="sys-title"><span>User ID</span><span>[X]</span></div>
+                    <div class="sys-body" style="text-align:center;">
+                        <img src="dante.jpg" style="width:100%; border:1px solid #330000;" alt="Dante">
+                        <div style="font-size:11px; margin-top:5px; color:#8B0000;">OPERATIVE: ANGELO</div>
+                    </div>
+                </div>
+
+                <div class="sys-window">
+                    <div class="sys-title"><span>Navigation</span></div>
+                    <div class="sys-body" style="padding:5px;">
+                        <ul class="nav-list">
+                            <li><a href="#section-dossier">> [01] CHARACTER DOSSIER</a></li>
+                            <li><a href="#section-games">> [02] GAMING STATION</a></li>
+                            <li><a href="#section-gear">> [03] GEAR & ATRIBUTES</a></li>
+                            <li><a href="#section-report">> [04] OBEZYANA REPORT</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="sys-window">
+                    <div class="sys-title"><span>Audio Stream</span></div>
+                    <div class="spotify-container">
+                        <iframe style="border-radius:0px" src="https://open.spotify.com/embed/playlist/0" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
+                </div>
+
+                <button class="back-btn" onclick="goBackToProfile()">[ Back to Profile ]</button>
             </div>
-            <button class="back-btn" onclick="goBackToProfile()">[ Back to Profile ]</button>
+
+            <div class="welcome-right">
+                
+                <div class="sys-window" id="section-dossier">
+                    <div class="sys-title"><span>💾 SYSTEM FILE: CHARACTER DOSSIER (MATRIX & MBTI)</span></div>
+                    <div class="tab-header">
+                        <button class="tab-btn active" onclick="openTab(event, 'tab-overview')">OVERVIEW</button>
+                        <button class="tab-btn" onclick="openTab(event, 'tab-buffs')">PASSIVE BUFFS</button>
+                        <button class="tab-btn" onclick="openTab(event, 'tab-debuffs')">VULNERABILITIES</button>
+                        <button class="tab-btn" onclick="openTab(event, 'tab-upgrades')">SKILL UPGRADES</button>
+                    </div>
+                    
+                    <div id="tab-overview" class="tab-content active">
+                        <strong style="color:#ff0000">CONFIGURATION:</strong> ISTP [Virtuoso] // Enneagram 8w7 [The Challenger]<br>
+                        <strong style="color:#ff0000">SOCIAL CALIBRATION:</strong> Ambivert<br><br>
+                        Angelo operates with a distinct aura of controlled intensity. A personality that thrives on structure, clear objectives, and calculated execution. People naturally look to you to anchor a situation when things become unstable. Your presence is defined by an understated, authoritative confidence and a demand for efficiency. You do not operate on raw emotion; you operate on impact and execution.
+                        <br><br>
+                        <strong style="color:#ff0000">> DUAL-MODE CALIBRATION:</strong><br>
+                        • <em>Solo Mode:</em> Detach completely to recharge, focus on personal skills, and analyze data with absolute independence.<br>
+                        • <em>Squad Mode:</em> Smoothly switch to an active, expressive state, taking charge of social dynamics and driving collective action.
+                    </div>
+
+                    <div id="tab-buffs" class="tab-content">
+                        <strong style="color:#ff0000">[SKILL: THE CHARIOT ENGINE (Dual 7 Arcana)]</strong><br>
+                        Your primary psychological drive is progress. You are hardwired to set targets and move toward them with high speed. In team dynamics, you naturally fall into the role of the vanguard—the one who cuts through initial resistance.<br><br>
+                        <strong style="color:#ff0000">[SKILL: THE EMPEROR FOUNDATION (Center 4 Arcana)]</strong><br>
+                        Gives you a natural aptitude for management and leadership. You have a structural mindset; you can see chaos and instinctively know how to delegate, organize, and establish order.
+                    </div>
+
+                    <div id="tab-debuffs" class="tab-content">
+                        <strong style="color:#ff0000">[WARNING: THE TOWER / HANGED MAN CASCADE (16 & 12 Arcana)]</strong><br>
+                        Under negative conditions, you tend to tolerate frustrating situations or toxic dynamics for too long (12 energy). Once your tolerance threshold is crossed, the 16 energy triggers an abrupt reset. This results in sudden bridges burned or completely abandoning long-term plans to regain freedom.<br><br>
+                        <strong style="color:#ff0000">[WARNING: RIGID AUTHORIZATION (Negative 4 Arcana)]</strong><br>
+                        When you feel a loss of control, your leadership can devolve into stubbornness. You risk insisting on total compliance rather than collaboration.
+                    </div>
+
+                    <div id="tab-upgrades" class="tab-content">
+                        <span style="color:#00ff00">> PROTOCOL 01 [THE FOOL 22]:</span> Relinquish unnecessary control. Learn to accept calculated risks and remain detached enough to laugh off unexpected setbacks.<br><br>
+                        <span style="color:#00ff00">> PROTOCOL 02 [STRENGTH 11]:</span> Energy pacing. Incorporate deliberate recovery periods into your routine to prevent the structural crash.<br><br>
+                        <span style="color:#00ff00">> PROTOCOL 03 [THE LOVERS 6]:</span> Choose what genuinely resonates with your core values, not just cold utility.<br><br>
+                        <span style="color:#00ff00">> PROTOCOL 04 [LONE WOLF FILTER]:</span> Force yourself to delegate operational tasks instead of trying to carry the entire load alone.
+                    </div>
+                </div>
+
+                <div class="sys-window" id="section-games">
+                    <div class="sys-title"><span>🎮 CAPCOM & PLATINUM DATABASE: INSTALLED GAMES</span></div>
+                    <div class="sys-body">
+                        <div class="game-item"><span class="game-title">Resident Evil (All Parts)</span><span class="game-status">[🏆 PLATINUM TROPHY]</span></div>
+                        <div class="game-item"><span class="game-title">Devil May Cry (All Parts)</span><span class="game-status">[⚔️ SSSTYLISH! MASTER]</span></div>
+                        <div class="game-item"><span class="game-title">Ultimate Marvel Vs Capcom 3</span><span class="game-status">[🕹️ READY TO FIGHT]</span></div>
+                        <div class="game-item"><span class="game-title">Monster Hunter Wilds</span><span class="game-status">[🐉 HUNTING MODE: ACTIVE]</span></div>
+                        <div class="game-item"><span class="game-title">Dishonored</span><span class="game-status">[🥷 STEALTH OPERATIVE]</span></div>
+                        <div class="game-item"><span class="game-title">Ghostrunner</span><span class="game-status">[⚡ HIGH-VELOCITY VANGUARD]</span></div>
+                        <div class="game-item"><span class="game-title">Tekken 6 & Dark Resurrection</span><span class="game-status">[🥊 COMBAT MODE]</span></div>
+                        <div class="game-item"><span class="game-title">Uncharted 4 & God of War</span><span class="game-status">[💿 PLAYSTATION CLASSICS]</span></div>
+                        <div class="game-item"><span class="game-title">Call of Duty & Final Fantasy</span><span class="game-status">[⚡ INSTALLED]</span></div>
+                        <div class="game-item"><span class="game-title">For Honor & Haze & SpiderMan</span><span class="game-status">[⚡ INSTALLED]</span></div>
+                        <div class="game-item"><span class="game-title">A Way Out & Batman & Cool Boarders</span><span class="game-status">[⚡ INSTALLED]</span></div>
+                        
+                        <div class="co-op-section">
+                            <div style="font-size:11px; color:#8B0000; margin-bottom:5px; font-weight:bold;">[🔒 SPECIAL CO-OP MODE DETECTED]</div>
+                            <div class="game-item"><span class="game-title" style="color:#ffcccc;">Minecraft</span><span class="game-status" style="color:#00ff00;">[🧱 SYSTEM BUILDING...]</span></div>
+                            <div class="game-item"><span class="game-title" style="color:#ffcccc;">Brawl Stars</span><span class="game-status" style="color:#00ff00;">[🐒 PLAYING WITH THE BEST PARTNER]</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sys-window" id="section-gear">
+                    <div class="sys-title"><span>🏍️ EQUIPMENT & CORE ATTRIBUTES</span></div>
+                    <div class="sys-body">
+                        <strong style="color:#ff0000">VISUAL STYLE:</strong> Inspired by Dante (DMC3). Heavy leather jackets, dark grunge aesthetics, Chrome Hearts silver crosses, and sharp tactical accessories.
+                        <br><br>
+                        <strong style="color:#ff0000">INTERESTS ENGINE:</strong> Obsession with complex tattoos, metal, punk subcultures, heavy atmospheric music, and technical engineering.
+                        <br><br>
+                        <strong style="color:#ff0000">VEHICLES LOG:</strong> Deep passion for high-speed motorbikes and iconic custom cars. Primary target: <em>1967 Chevrolet Impala</em> (The Winchester Configuration).
+                    </div>
+                </div>
+
+                <div class="sys-window" id="section-report">
+                    <div class="sys-title"><span>🚨 DECRYPTED LOG: WHY HE IS THE ULTIMATE OBEZYANA</span></div>
+                    <div class="sys-body">
+                        <p style="font-size:11px; color:#888; margin-bottom:12px;">[SYSTEM]: Наведите курсор на замазанные плашки, чтобы снять шифрование данных.</p>
+                        
+                        <div class="classified-item"><strong>01.</strong> <span class="spoiler">coz ur intentions are genuinely nice</span></div>
+                        <div class="classified-item"><strong>02.</strong> <span class="spoiler">coz ur genuinely funny</span></div>
+                        <div class="classified-item"><strong>03.</strong> <span class="spoiler">coz ur possess real leadership qualities</span></div>
+                        <div class="classified-item"><strong>04.</strong> <span class="spoiler">coz ur extremely loyal</span></div>
+                        <div class="classified-item"><strong>05.</strong> <span class="spoiler">coz ur stay through every single argument and misunderstanding</span></div>
+                        <div class="classified-item"><strong>06.</strong> <span class="spoiler">coz ur understand silence and read moods perfectly without words</span></div>
+                        <div class="classified-item"><strong>07.</strong> <span class="spoiler">coz ur style, music taste, and interests are objectively great</span></div>
+                        <div class="classified-item"><strong>08.</strong> <span class="spoiler">coz ur smarter than the top level 🤓☝🏻</span></div>
+                        <div class="classified-item"><strong>09.</strong> <span class="spoiler">coz ur just a unique personality</span></div>
+                        <div class="classified-item"><strong>10.</strong> <span class="spoiler">coz ur almost as cool as the best one</span></div>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
     </div>
@@ -472,6 +708,23 @@
                 inputEl.value = "";
                 alert("Запись успешно отправлена!"); 
             }
+        }
+
+        /* Функция переключения табов в Досье */
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
         }
     </script>
 </body>
