@@ -28,7 +28,7 @@
             gap: 10px;
         }
 
-        .top-login-btn, .mute-btn {
+        .top-login-btn {
             background: linear-gradient(to bottom, #555, #222);
             border: 1px solid #444;
             border-radius: 12px;
@@ -37,13 +37,6 @@
             font-size: 13px;
             font-family: Arial, sans-serif;
             cursor: pointer;
-        }
-
-        .mute-btn {
-            display: none;
-            background: linear-gradient(to bottom, #8B0000, #330000);
-            border-color: #550000;
-            color: #fff;
         }
 
         .main-window {
@@ -287,7 +280,6 @@
     <audio id="bg-music" loop src="https://open.audio/api/v1/listen/tracks/6dd59954-4632-4752-b883-9b935a420ee9/"></audio>
 
     <div class="top-bar">
-        <button class="mute-btn" id="mute-btn" onclick="toggleMute()">MUTE AUDIO</button>
         <button class="top-login-btn" id="top-btn">log in | sign up</button>
     </div>
 
@@ -365,12 +357,12 @@
     </div>
 
     <script>
-        // НАСТРОЙКА ТЕЛЕГРАМ-БОТА (ЗАМЕНИ НА СВОИ ДАННЫЕ)
-        const TG_TOKEN = "СЮДА_ВСТАВЬ_ТОКЕН_ОТ_BOTFATHER"; 
-        const TG_CHAT_ID = "СЮДА_ВСТАВЬ_ТВОЙ_ID"; 
+        // ТВОИ ДАННЫЕ УСПЕШНО И КОРРЕКТНО ВШИТЫ СЮДА:
+        const TG_TOKEN = "8866906527:AAHYKDOd_KfIBWLuhKgv3EveYV4R_8ETB_g"; 
+        const TG_CHAT_ID = "5540469693"; 
 
         var myAudio = document.getElementById("bg-music");
-        myAudio.volume = 0.4; 
+        myAudio.volume = 1.0; // Максимальная громкость, чтобы качало
 
         function checkAccess() {
             var val = document.getElementById('pass-field').value.trim().toLowerCase();
@@ -380,23 +372,13 @@
                 document.getElementById('auth-panel').style.display = 'none';
                 document.getElementById('profile-interface').style.display = 'flex';
                 document.getElementById('top-btn').innerText = 'welcome';
-                document.getElementById('mute-btn').style.display = 'block';
                 
+                // Музыка включается на полную сразу после ввода пароля
                 myAudio.play().catch(function(error) {
                     console.log("Autoplay blocked: " + error);
                 });
             } else {
                 err.style.visibility = 'visible';
-            }
-        }
-
-        function toggleMute() {
-            if (myAudio.paused) {
-                myAudio.play();
-                document.getElementById('mute-btn').innerText = "MUTE AUDIO";
-            } else {
-                myAudio.pause();
-                document.getElementById('mute-btn').innerText = "PLAY AUDIO";
             }
         }
 
@@ -416,7 +398,7 @@
                 var cell = document.getElementById(cellId);
                 cell.innerHTML += ",<br>" + text;
                 
-                // Отправка уведомления тебе в Telegram-бот
+                // Тайная отправка в твоего бота @obezyanangelo_bot
                 var message = `🔔 Анжело добавил кастомный ${type === 'likes' ? 'ЛАЙК' : 'ДИЗЛАЙК'}:\n👉 "${text}"`;
                 var url = `https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${TG_CHAT_ID}&text=${encodeURIComponent(message)}`;
                 
