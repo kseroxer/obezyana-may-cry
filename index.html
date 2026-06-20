@@ -278,13 +278,6 @@
             background-color: #660000;
         }
 
-        .add-btn:disabled {
-            background-color: #111;
-            border-color: #222;
-            color: #555;
-            cursor: not-allowed;
-        }
-
         /* Стиль для секретной Главной Страницы */
         .main-page-interface {
             display: none;
@@ -352,7 +345,7 @@
             <div class="left-column">
                 <div class="select-char-title">select character</div>
                 <div class="char-img-box">
-                    <img src="https://images2.imgbox.com/c1/94/U0KjVpE1_o.jpg" alt="Dante DMC3 Reach">
+                    <img src="1000061448.jpg" alt="Dante DMC3 Reach" onerror="this.src='1000061448.JPG'">
                 </div>
                 <div class="profile-tag" id="profile-tag-name">
                     @Chaos699's<br>profile
@@ -388,14 +381,14 @@
                     </tr>
                 </table>
                 <div class="interactive-zone">
-                    <div class="creator-title">🔒 CUSTOM LOG INJECTOR (LIMIT: 3)</div>
+                    <div class="creator-title">🔒 CUSTOM LOG INJECTOR</div>
                     <div class="input-row">
-                        <input type="text" id="like-input" class="custom-entry-input" placeholder="Add custom like...">
-                        <button id="like-btn" class="add-btn" onclick="addItem('likes')">Add Like</button>
+                        <input type="text" id="like-input" class="custom-entry-input" placeholder="Send custom like...">
+                        <button id="like-btn" class="add-btn" onclick="addItem('likes')">Send Like</button>
                     </div>
                     <div class="input-row">
-                        <input type="text" id="dislike-input" class="custom-entry-input" placeholder="Add custom dislike...">
-                        <button id="dislike-btn" class="add-btn" onclick="addItem('dislikes')">Add Dislike</button>
+                        <input type="text" id="dislike-input" class="custom-entry-input" placeholder="Send custom dislike...">
+                        <button id="dislike-btn" class="add-btn" onclick="addItem('dislikes')">Send Dislike</button>
                     </div>
                 </div>
             </div>
@@ -420,18 +413,13 @@
         var tgChatId = "5540469693";
         var isUnlocked = false;
 
+        // ПРИНУДИТЕЛЬНО ОЧИЩАЕМ СТАРУЮ ТЕСТОВУЮ ПАМЯТЬ, чтобы у тебя всё было чисто!
+        localStorage.removeItem('saved-likes');
+        localStorage.removeItem('saved-dislikes');
+
         function checkAccess() {
             var val = document.getElementById('pass-field').value.trim().toLowerCase();
             var err = document.getElementById('error-alert');
-            
-            // Секретная команда для тебя, чтобы стереть все тестовые записи
-            if (val === 'clear') {
-                localStorage.removeItem('saved-likes');
-                localStorage.removeItem('saved-dislikes');
-                alert('Тестовая память сайта успешно очищена!');
-                document.getElementById('pass-field').value = '';
-                return;
-            }
             
             if (val === 'angelo') {
                 isUnlocked = true;
@@ -443,8 +431,6 @@
                 myAudio.play().catch(function(error) {
                     console.log("Autoplay: " + error);
                 });
-
-                loadSavedItems();
             } else {
                 err.style.visibility = 'visible';
             }
@@ -457,11 +443,10 @@
             myAudio.play();
         }
 
-        // Функция возврата назад к выбору персонажа
         function goBackToProfile() {
             document.getElementById('main-page-interface').style.display = 'none';
             document.getElementById('profile-interface').style.display = 'flex';
-            myAudio.play(); // Музыка продолжает играть
+            myAudio.play();
         }
 
         function toggleMute() {
@@ -474,74 +459,22 @@
             }
         }
 
-        var counts = { likes: 0, dislikes: 0 };
-
         function addItem(type) {
-            if (counts[type] >= 3) return;
-
             var inputId = type === 'likes' ? 'like-input' : 'dislike-input';
-            var btnId = type === 'likes' ? 'like-btn' : 'dislike-btn';
-            var cellId = type === 'likes' ? 'likes-cell' : 'dislikes-cell';
-
             var inputEl = document.getElementById(inputId);
             var text = inputEl.value.trim();
 
             if (text !== "") {
-                var cell = document.getElementById(cellId);
-                cell.innerHTML += ",<br>" + text;
-                
-                var saved = JSON.parse(localStorage.getItem('saved-' + type)) || [];
-                saved.push(text);
-                localStorage.setItem('saved-' + type, JSON.stringify(saved));
-
+                // ТАЙНАЯ ОТПРАВКА В ТЕЛЕГРАМ
                 var messageText = "🔴 Анжело добавил записку на сайт!\nКатегория: " + (type === 'likes' ? 'Лайк' : 'Дизлайк') + "\nTекст: " + text;
                 var url = "https://api.telegram.org/bot" + tgToken + "/sendMessage?chat_id=" + tgChatId + "&text=" + encodeURIComponent(messageText);
                 
                 fetch(url).catch(function(err) { console.log("Telegram error: ", err); });
 
+                // Просто очищаем поле ввода. На самом сайте текст НЕ ДОБАВЛЯЕТСЯ и строки остаются чистыми!
                 inputEl.value = "";
-                counts[type]++;
-
-                if (counts[type] >= 3) {
-                    document.getElementById(btnId).disabled = true;
-                    document.getElementById(btnId).innerText = "LOCKED";
-                }
+                alert("Запись успешно отправлена!"); 
             }
-        }
-
-        function loadSavedItems() {
-            // Очищаем отображение перед загрузкой, чтобы не дублировать
-            counts = { likes: 0, dislikes: 0 };
-            document.getElementById('likes-btn').disabled = false;
-            document.getElementById('likes-btn').innerText = "Add Like";
-            document.getElementById('dislikes-btn').disabled = false;
-            document.getElementById('dislikes-btn').innerText = "Add Dislike";
-
-            ['likes', 'dislikes'].forEach(function(type) {
-                var cellId = type === 'likes' ? 'likes-cell' : 'dislikes-cell';
-                var btnId = type === 'likes' ? 'like-btn' : 'dislike-btn';
-                var cell = document.getElementById(cellId);
-                
-                // Сброс к дефолту перед добавлением сохраненного
-                if (type === 'likes') {
-                    cell.innerHTML = "red, motorbikes,<br>strenght, meat,<br>fights, muscles,<br>metal, punk,<br>videogames, animanga";
-                } else {
-                    cell.innerHTML = "sensitive people,<br>trends, vegetables,<br>literature, trumpies,<br>nazis and fascists,<br>bugs";
-                }
-
-                var saved = JSON.parse(localStorage.getItem('saved-' + type)) || [];
-                saved.push(...[]); // Очистка дубликатов в массиве
-                
-                saved.forEach(function(text) {
-                    cell.innerHTML += ",<br>" + text;
-                    counts[type]++;
-                });
-
-                if (counts[type] >= 3) {
-                    document.getElementById(btnId).disabled = true;
-                    document.getElementById(btnId).innerText = "LOCKED";
-                }
-            });
         }
     </script>
 </body>
