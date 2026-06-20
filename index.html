@@ -17,6 +17,8 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
+            position: relative;
+            overflow-x: hidden;
         }
 
         .top-bar {
@@ -56,6 +58,7 @@
             min-height: 380px;
             display: flex;
             flex-direction: column;
+            z-index: 5;
         }
 
         .auth-panel {
@@ -363,7 +366,7 @@
             color: #ffffff;
         }
 
-        /* Табы для досье */
+        /* ТАБЫ ДЛЯ ДОСЬЕ */
         .tab-header {
             display: flex;
             background-color: #111;
@@ -394,7 +397,7 @@
             display: block;
         }
 
-        /* Стили для игр */
+        /* ИГРЫ */
         .game-item {
             display: flex;
             justify-content: space-between;
@@ -411,7 +414,7 @@
             padding-top: 10px;
         }
 
-        /* Скрытый текст (Зашифрованные логи) */
+        /* СКРЫТЫЙ ТЕКСТ (ОБЕЗЬЯНА РЕПОРТ) */
         .classified-item {
             margin-bottom: 10px;
             font-size: 13px;
@@ -429,14 +432,104 @@
             color: #ff3333;
         }
 
-        /* Стили виджета Spotify */
-        .spotify-container {
+        .back-btn {
+            background-color: #111111;
             border: 1px solid #8B0000;
-            background: #000;
+            color: #8B0000;
+            padding: 8px 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .back-btn:hover {
+            background-color: #220000;
+            color: #ffffff;
+        }
+
+        /* --- НОВЫЙ ИНТЕРАКТИВНЫЙ DMC STYLE METER --- */
+        .style-meter-box {
+            text-align: center;
+            padding: 10px;
+        }
+        .style-display {
+            font-size: 28px;
+            font-weight: bold;
+            color: #444;
+            margin: 15px 0;
+            letter-spacing: 2px;
+            min-height: 35px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+            transition: all 0.1s ease;
+        }
+        .style-phrase {
+            font-size: 11px;
+            color: #888;
+            height: 15px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        .style-trigger-btn {
+            background: linear-gradient(to bottom, #8B0000, #440000);
+            border: 1px solid #ff3333;
+            color: #fff;
+            padding: 8px 15px;
+            font-family: monospace;
+            font-size: 12px;
+            cursor: pointer;
+            width: 100%;
+            letter-spacing: 1px;
+            box-sizing: border-box;
+        }
+        .style-trigger-btn:hover {
+            background: linear-gradient(to bottom, #ff0000, #8B0000);
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+
+        /* ПОЛНОЭКРАННАЯ ВСПЫШКА РАНГА */
+        #screen-flash-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 0, 0, 0.15);
+            z-index: 9999;
+            pointer-events: none;
+            justify-content: center;
+            align-items: center;
+            animation: flashAnimation 0.6s ease-out forwards;
+        }
+        .flash-rank-text {
+            font-size: 120px;
+            font-weight: 900;
+            color: #ffffff;
+            font-family: 'Arial Black', Impact, sans-serif;
+            text-shadow: 0 0 40px #ff0000, 0 0 70px #ff0000, 0 0 100px #ff0000;
+            transform: scale(0.5);
+            animation: textGrow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            letter-spacing: 5px;
+        }
+
+        @keyframes flashAnimation {
+            0% { background-color: rgba(255, 255, 255, 0.8); }
+            30% { background-color: rgba(255, 0, 0, 0.3); }
+            100% { background-color: rgba(0, 0, 0, 0); }
+        }
+        @keyframes textGrow {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
         }
     </style>
 </head>
 <body>
+
+    <div id="screen-flash-overlay"><div class="flash-rank-text" id="flash-text">SSS</div></div>
 
     <audio id="bg-music" loop src="Devil May Cry 3 - Devils Never Cry.mp3"></audio>
 
@@ -532,9 +625,11 @@
                 </div>
 
                 <div class="sys-window">
-                    <div class="sys-title"><span>Audio Stream</span></div>
-                    <div class="spotify-container">
-                        <iframe style="border-radius:0px" src="https://open.spotify.com/embed/playlist/0" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <div class="sys-title"><span>⚔️ Combat Style Determinator</span></div>
+                    <div class="sys-body style-meter-box">
+                        <div class="style-phrase" id="style-phrase">Ready for combat...</div>
+                        <div class="style-display" id="style-display">?</div>
+                        <button class="style-trigger-btn" onclick="generateDmcStyle()">[ GENERATE STYLE ]</button>
                     </div>
                 </div>
 
@@ -725,6 +820,87 @@
             document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
+        }
+
+        /* ЛОГИКА РАНДОМАЙЗЕРА СТИЛЯ (DMC STYLE METER) */
+        var ranks = [
+            { name: "D", phrase: "Dull...", color: "#666", flash: false },
+            { name: "C", phrase: "Cool!", color: "#4494a8", flash: false },
+            { name: "B", phrase: "Blast!", color: "#bda94f", flash: false },
+            { name: "A", phrase: "Alright!", color: "#d67738", flash: false },
+            { name: "S", phrase: "Stylish!!", color: "#ff4500", flash: true },
+            { name: "SS", phrase: "Super Stylish!!!", color: "#ff1493", flash: true },
+            { name: "SSS", phrase: "Smokin' Sexy Style!!!", color: "#ff0000", flash: true }
+        ];
+
+        var isRolling = false;
+
+        function generateDmcStyle() {
+            if (isRolling) return;
+            isRolling = true;
+
+            var displayEl = document.getElementById("style-display");
+            var phraseEl = document.getElementById("style-phrase");
+            var counter = 0;
+
+            // Хакерское кручение букв (анимация)
+            var shuffleInterval = setInterval(function() {
+                var randomRank = ranks[Math.floor(Math.random() * ranks.length)];
+                displayEl.innerText = randomRank.name;
+                displayEl.style.color = "#ff0000";
+                phraseEl.innerText = "CALCULATING RATIO...";
+                counter++;
+
+                if (counter > 12) {
+                    clearInterval(shuffleInterval);
+                    finalizeRank();
+                }
+            }, 80);
+
+            function finalizeRank() {
+                // Шансы выпадения: чем выше ранг, тем сложнее выбить (SSS - 8% шанс)
+                var rand = Math.random();
+                var chosenRank;
+                
+                if (rand < 0.15) chosenRank = ranks[0];      // D
+                else if (rand < 0.35) chosenRank = ranks[1]; // C
+                else if (rand < 0.55) chosenRank = ranks[2]; // B
+                else if (rand < 0.75) chosenRank = ranks[3]; // A
+                else if (rand < 0.87) chosenRank = ranks[4]; // S
+                else if (rand < 0.94) chosenRank = ranks[5]; // SS
+                else chosenRank = ranks[6];                  // SSS
+
+                displayEl.innerText = chosenRank.name;
+                displayEl.style.color = chosenRank.color;
+                phraseEl.innerText = chosenRank.phrase;
+
+                // Если выпал высокий ранг (S, SS, SSS) — активируем вспышку на весь экран!
+                if (chosenRank.flash) {
+                    var overlay = document.getElementById("screen-flash-overlay");
+                    var flashText = document.getElementById("flash-text");
+                    
+                    flashText.innerText = chosenRank.name;
+                    // Меняем цвет тени под цвет ранга
+                    flashText.style.textShadow = "0 0 40px " + chosenRank.color + ", 0 0 70px " + chosenRank.color;
+                    
+                    overlay.style.display = "flex";
+                    
+                    // Перезапускаем анимацию
+                    overlay.style.animation = 'none';
+                    overlay.offsetHeight; 
+                    overlay.style.animation = 'flashAnimation 0.7s ease-out forwards';
+
+                    flashText.style.animation = 'none';
+                    flashText.offsetHeight;
+                    flashText.style.animation = 'textGrow 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+
+                    setTimeout(function() {
+                        overlay.style.display = "none";
+                    }, 700);
+                }
+
+                isRolling = false;
+            }
         }
     </script>
 </body>
