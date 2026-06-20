@@ -3,322 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROJECT: ANGELO // OBEZYANA MAY CRY</title>
+    <title>OBEZYANA MAY CRY</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ГЛОБАЛЬНЫЙ Y2K/VAMP СТИЛЬ */
+        /* БАЗОВЫЕ НАСТРОЙКИ СТИЛЯ */
         body {
-            background-color: #000000;
+            background-color: #0c0202;
             color: #ffffff;
             font-family: 'Courier Prime', monospace;
             margin: 0;
             padding: 20px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            background-image: repeating-linear-gradient(rgba(0,0,0,0) 0, rgba(15,0,0,0.15) 50%, rgba(0,0,0,0) 100%);
-            background-size: 100% 4px;
+            background-image: radial-gradient(circle, #1a0505 0%, #000000 100%);
         }
 
-        /* ТЕРМИНАЛ ВХОДА (UMBRELLA CORP) */
-        .terminal-container {
-            border: 3px solid #8B0000;
-            background-color: #050505;
+        /* КНОПКА LOGIN НАВЕРХУ */
+        .top-bar {
             width: 100%;
-            max-width: 850px;
-            box-shadow: 0 0 25px rgba(139, 0, 0, 0.6);
+            max-width: 800px;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
         }
 
-        .terminal-header {
-            background-color: #8B0000;
-            color: #ffffff;
-            padding: 10px 15px;
-            font-weight: bold;
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            border-bottom: 2px solid #8B0000;
+        .top-login-btn {
+            background: linear-gradient(to bottom, #555, #222);
+            border: 1px solid #444;
+            border-radius: 12px;
+            color: #ccc;
+            padding: 6px 20px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
         }
 
-        .terminal-body {
-            padding: 40px 20px;
+        /* ОКНО ИНТЕРФЕЙСА */
+        .main-window {
+            border: 2px solid #8B0000;
+            background-color: #000000;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            box-sizing: border-box;
+        }
+
+        /* ЭКРАН 1: СЕКРЕТНЫЙ ВХОД */
+        .auth-panel {
+            padding: 60px 20px;
             text-align: center;
-        }
-
-        .warning-text {
-            color: #ff0000;
-            font-family: 'VT323', monospace;
-            font-size: 32px;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-            animation: blink 1s steps(2, start) infinite;
         }
 
         .input-label {
             display: block;
-            margin-bottom: 15px;
-            color: #aaaaaa;
-            font-size: 14px;
-            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: #8B0000;
+            font-weight: bold;
+            font-size: 16px;
+            letter-spacing: 2px;
         }
 
         .code-input {
-            background-color: #111;
-            border: 2px solid #8B0000;
-            color: #ff0000;
-            padding: 12px;
+            background-color: #0a0a0a;
+            border: 1px solid #8B0000;
+            color: #ffffff;
+            padding: 10px;
             font-family: 'Courier Prime', monospace;
-            font-size: 18px;
+            font-size: 16px;
             text-align: center;
             width: 80%;
-            max-width: 280px;
-            margin-bottom: 25px;
+            max-width: 250px;
+            margin-bottom: 20px;
             outline: none;
-            text-transform: uppercase;
         }
 
-        .terminal-btn {
+        .submit-btn {
             background-color: #8B0000;
             border: 1px solid #ff0000;
-            color: #ffffff;
-            padding: 12px 30px;
+            color: #fff;
+            padding: 10px 25px;
             font-family: 'Courier Prime', monospace;
-            font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s;
         }
 
-        .terminal-btn:hover {
-            background-color: #ff0000;
-            box-shadow: 0 0 10px #ff0000;
-        }
-
-        .error-msg {
+        .error-text {
             color: #ff0000;
-            margin-top: 20px;
-            font-size: 13px;
-            font-weight: bold;
+            margin-top: 15px;
+            font-size: 12px;
             visibility: hidden;
         }
 
-        /* ОСНОВНОЙ ХАБ (DMC STYLE ИДЕНТИЧНО РЕФЕРЕНСУ) */
-        .main-hub {
-            display: none;
+        /* ЭКРАН 2: ОДИН В ОДИН С РЕФЕРЕНСОМ */
+        .profile-interface {
+            display: none; /* Скрыто до ввода пароля */
             flex-direction: row;
             flex-wrap: wrap;
             width: 100%;
         }
 
-        .left-panel {
-            flex: 1.2;
-            min-width: 320px;
-            border-right: 2px solid #8B0000;
+        /* ЛЕВАЯ КОЛОНКА (СЕЛЕКТ ПЕРСОНАЖА + БОЛЬШАЯ ФОТКА) */
+        .char-select-column {
+            flex: 1;
+            min-width: 280px;
+            border-right: 1px solid #8B0000;
+            display: flex;
+            flex-direction: column;
             box-sizing: border-box;
         }
 
-        .right-panel {
-            flex: 1;
+        .column-title {
+            text-align: center;
+            padding: 10px;
+            color: #888;
+            font-size: 14px;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #111;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            flex-grow: 1;
+            display: flex;
+            background-color: #050505;
+            overflow: hidden;
+        }
+
+        /* Твой арт из Пинтереста во весь размер левой панели */
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ПРАВАЯ КОЛОНКА (ТАБЛИЦА С ХАРАКТЕРИСТИКАМИ) */
+        .data-column {
+            flex: 1.3;
             min-width: 320px;
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
-            background-color: #020202;
         }
 
-        /* АНКЕТА И ДАННЫЕ */
-        .info-row {
-            display: flex;
-            border-bottom: 1px solid #222;
-            font-size: 13px;
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .info-label {
-            width: 140px;
-            color: #8B0000;
-            font-weight: bold;
+        .stats-table td {
             padding: 12px 15px;
-            border-right: 1px solid #222;
-            text-transform: uppercase;
+            border-bottom: 1px solid #8B0000;
+            border-left: 1px solid #8B0000;
+            font-size: 14px;
         }
 
-        .info-value {
-            padding: 12px 15px;
+        .stats-table td:first-child {
+            border-left: none;
+            width: 100px;
             color: #ffffff;
         }
 
-        /* ИНТЕРАКТИВНЫЕ ВКЛАДКИ (STATS / LIKES / DISLIKES) */
-        .tabs-menu {
-            display: flex;
-            background-color: #111;
-            border-bottom: 2px solid #8B0000;
+        .stats-table td:last-child {
+            color: #ffffff;
+            text-align: right;
+            text-transform: uppercase;
         }
 
-        .tab-btn {
-            flex: 1;
-            background: none;
-            border: none;
-            color: #888;
-            padding: 12px;
-            font-family: 'Courier Prime', monospace;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            border-right: 1px solid #222;
-        }
-
-        .tab-btn.active {
-            background-color: #8B0000;
-            color: #fff;
-        }
-
-        .tab-content {
+        /* ПУСТАЯ ПАНЕЛЬ ДЛЯ ТВОЕГО ТЕКСТА (Зона "Кастомизация") */
+        .custom-text-area {
             padding: 20px;
-            display: none;
             font-size: 13px;
             line-height: 1.6;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* RPG СТАТУС-БАРЫ */
-        .stat-wrapper {
-            margin-bottom: 15px;
-        }
-
-        .stat-title {
-            font-size: 11px;
-            color: #aaa;
-            margin-bottom: 5px;
-        }
-
-        .stat-bar {
-            background-color: #1a1a1a;
-            border: 1px solid #8B0000;
-            height: 10px;
-            position: relative;
-        }
-
-        .stat-fill {
-            background-color: #8B0000;
-            height: 100%;
-            box-shadow: 0 0 8px #ff0000;
-        }
-
-        /* БЛОК С КАРТИНКОЙ И МУЗЫКОЙ */
-        .art-box {
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 2px solid #8B0000;
-            background-color: #000;
-            height: 300px;
-        }
-
-        .art-box img {
-            max-width: 100%;
-            max-height: 100%;
-            border: 2px solid #8B0000;
-        }
-
-        /* ПЛЕЕР SPOTIFY */
-        .audio-box {
-            padding: 15px;
-            background-color: #080808;
-        }
-
-        /* АНИМАЦИЯ МИГАНИЯ */
-        @keyframes blink {
-            to { visibility: hidden; }
+            color: #ccc;
+            flex-grow: 1;
+            background-color: #020202;
         }
     </style>
 </head>
 <body>
 
-    <div class="terminal-container">
-        <div id="auth-screen" class="terminal-body">
-            <div class="warning-text">UMBRELLA CORP. RESTRICTED SYSTEM</div>
-            <label for="code-input" class="input-label">ENTER OBEZYANA CODE:</label>
-            <input type="text" id="code-input" class="code-input" autocomplete="off" placeholder="CODE...">
+    <div class="top-bar">
+        <button class="top-login-btn" id="top-btn">log in | sign up</button>
+    </div>
+
+    <div class="main-window">
+        
+        <div id="auth-panel" class="auth-panel">
+            <label for="pass-field" class="input-label">ENTER OBEZYANA CODE:</label>
+            <input type="text" id="pass-field" class="code-input" autocomplete="off" placeholder="CODE...">
             <br>
-            <button onclick="verifyAccess()" class="terminal-btn">[ INITIALIZE DECRYPTION ]</button>
-            <div id="error-box" class="error-msg">ACCESS DENIED: INVALID DATA ENTRY</div>
+            <button onclick="checkAccess()" class="submit-btn">ENTER</button>
+            <div id="error-alert" class="error-text">ACCESS DENIED</div>
         </div>
 
-        <div id="main-hub" class="main-hub">
+        <div id="profile-interface" class="profile-interface">
             
-            <div class="left-panel">
-                <div class="terminal-header">DATA_FILE // ANGELO_LOG</div>
-                <div class="info-row"><div class="info-label">NAME:</div><div class="info-value">Angelo</div></div>
-                <div class="info-row"><div class="info-label">AGE:</div><div class="info-value">21 Y/O</div></div>
-                <div class="info-row"><div class="info-label">GENDER:</div><div class="info-value">Male</div></div>
-                <div class="info-row"><div class="info-label">ARCHETYPE:</div><div class="info-value">ISTP // 8w7 // Ambivert</div></div>
-                <div class="info-row"><div class="info-label">WEAPONS:</div><div class="info-value">Dual Pistols (DMC Dante Style)</div></div>
-                <div class="info-row"><div class="info-label">ELEMENT:</div><div class="info-value">Earth Might (Cole from Ninjago)</div></div>
-                <div class="info-row"><div class="info-label">MOOD STATUS:</div><div class="info-value">🫩 (Neutral-Cool)</div></div>
-
-                <div class="tabs-menu">
-                    <button class="tab-btn active" onclick="switchTab('stats')">[ COMBAT STATS ]</button>
-                    <button class="tab-btn" onclick="switchTab('likes')">[ LIKES ]</button>
-                    <button class="tab-btn" onclick="switchTab('dislikes')">[ DISLIKES ]</button>
-                    <button class="tab-btn" onclick="switchTab('secret')">[ RESTRICTED ]</button>
-                </div>
-
-                <div id="stats" class="tab-content active">
-                    <div class="stat-wrapper">
-                        <div class="stat-title">HP [SLEEP SCHEDULE]: 696 / 999</div>
-                        <div class="stat-bar"><div class="stat-fill" style="width: 70%;"></div></div>
-                    </div>
-                    <div class="stat-wrapper">
-                        <div class="stat-title">ATK [STUBBORNNESS / WILLPOWER]: 909 / 999</div>
-                        <div class="stat-bar"><div class="stat-fill" style="width: 91%;"></div></div>
-                    </div>
-                    <div class="stat-wrapper">
-                        <div class="stat-title">DEF [STEALTH / LOW-PROFILE]: 199 / 999</div>
-                        <div class="stat-bar"><div class="stat-fill" style="width: 20%;"></div></div>
-                    </div>
-                    <p style="font-size: 11px; color:#8B0000; margin-top:15px;">PASSIVE PERKS: Maxed Gaming Skill, SSS-Rank Intuitive Vibe-Reading.</p>
-                </div>
-
-                <div id="likes" class="tab-content">
-                    • Pizza, Premium Gaming, Total Control.<br>
-                    • Resident Evil lore & Devil May Cry combos.<br>
-                    • Sleek alternative clothing, raw tattoos, motorbikes.<br>
-                    • Felines / Cats & Dean Winchester's 1967 Chevrolet Impala.
-                </div>
-
-                <div id="dislikes" class="tab-content">
-                    • Injustice, personal failures, and superficial crowds.<br>
-                    • Being forced into overly sensitive / vulnerable states.<br>
-                    • Betrayal, unspoken thoughts, and avoiding direct communication.
-                </div>
-
-                <div id="secret" class="tab-content" style="color: #ff0000; border: 1px dashed #8B0000; padding: 15px; background-color: #0a0000;">
-                    <strong>[DECRYPTED NOTE]: WHY UR THE BEST OBEZYANA</strong><br><br>
-                    1. You read my mood like open-source code. Even when I say absolutely nothing, you hack my frequency, know exactly what I feel, and tell me what to do. Your radar for my mood is unmatched.<br><br>
-                    2. Despite the cold, detached aura, you never run. While typical guys ghost or avoid conversations, you enforce the rule: "We talk, and we solve it." You face the problems, give raw advice, and fix it.<br><br>
-                    3. Your intentions are pure genuine, and it's incredibly endearing. Your dry wit and protective behaviour are elite-tier cool. You are irreplaceable. Very nice.
+            <div class="char-select-column">
+                <div class="column-title">select character</div>
+                <div class="image-wrapper">
+                    <img src="https://i.pinimg.com/736xl/08/94/39/08943961ef429e7104bda9b9643fcc88.jpg" alt="Dante DMC">
                 </div>
             </div>
 
-            <div class="right-panel">
-                <div class="terminal-header">SUBJECT_VISUAL_LORE</div>
-                <div class="art-box">
-                    <img src="https://i.ibb.co/bRSZpYw/dante-ref.jpg" alt="Angelo Custom Art">
-                </div>
-                
-                <div class="terminal-header">AUDIOFREQUENCY_LOG</div>
-                <div class="audio-box">
-                    <iframe style="border-radius:0px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX10zKj2vK6p3?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            <div class="data-column">
+                <table class="stats-table">
+                    <tr>
+                        <td>name:</td>
+                        <td>ANGELO</td>
+                    </tr>
+                    <tr>
+                        <td>age:</td>
+                        <td>21</td>
+                    </tr>
+                    <tr>
+                        <td>specie:</td>
+                        <td>human</td>
+                    </tr>
+                    <tr>
+                        <td>weapon:</td>
+                        <td>spear LEVEL 10</td>
+                    </tr>
+                </table>
+
+                <div class="custom-text-area">
+                    здесь будет твой текст (likes, dislikes и всё остальное), когда ты его придумаешь...
                 </div>
             </div>
 
@@ -326,31 +241,18 @@
     </div>
 
     <script>
-        // Функция проверки кода
-        function verifyAccess() {
-            var code = document.getElementById('code-input').value.trim().toLowerCase();
-            var errorBox = document.getElementById('error-box');
+        // Проверка пароля
+        function checkAccess() {
+            var val = document.getElementById('pass-field').value.trim().toLowerCase();
+            var err = document.getElementById('error-alert');
             
-            if (code === 'angelo') {
-                document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('main-hub').style.display = 'flex';
+            if (val === 'angelo') {
+                document.getElementById('auth-panel').style.display = 'none';
+                document.getElementById('profile-interface').style.display = 'flex';
+                document.getElementById('top-btn').innerText = 'welcome';
             } else {
-                errorBox.style.visibility = 'visible';
+                err.style.visibility = 'visible';
             }
-        }
-
-        // Функция переключения вкладок (STATS / LIKES / ДИЗЛАЙКИ)
-        function switchTab(tabId) {
-            var contents = document.getElementsByClassName('tab-content');
-            for (var i = 0; i < contents.length; i++) {
-                contents[i].classList.remove('active');
-            }
-            var buttons = document.getElementsByClassName('tab-btn');
-            for (var i = 0; i < buttons.length; i++) {
-                buttons[i].classList.remove('active');
-            }
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
         }
     </script>
 </body>
