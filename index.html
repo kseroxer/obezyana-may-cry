@@ -288,7 +288,7 @@
         /* Стиль для секретной Главной Страницы */
         .main-page-interface {
             display: none;
-            padding: 30px;
+            padding: 40px 20px;
             text-align: center;
             flex-direction: column;
             justify-content: center;
@@ -308,6 +308,24 @@
             line-height: 1.6;
             max-width: 500px;
             color: #cccccc;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            background-color: #111111;
+            border: 1px solid #8B0000;
+            color: #8B0000;
+            padding: 10px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-btn:hover {
+            background-color: #220000;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -334,7 +352,7 @@
             <div class="left-column">
                 <div class="select-char-title">select character</div>
                 <div class="char-img-box">
-                    <img src="./1000061448.jpg" id="dante-pic" alt="Dante DMC3 Reach" onerror="this.src='1000061448.JPG'">
+                    <img src="https://images2.imgbox.com/c1/94/U0KjVpE1_o.jpg" alt="Dante DMC3 Reach">
                 </div>
                 <div class="profile-tag" id="profile-tag-name">
                     @Chaos699's<br>profile
@@ -389,6 +407,7 @@
                 Ты успешно взломал систему, Анжело.<br><br>
                 Музыка рубит, боты работают, база данных обновлена. Здесь ты можешь написать любой текст, который он увидит, когда перейдет по кнопке WELCOME!
             </div>
+            <button class="back-btn" onclick="goBackToProfile()">[ Back to Profile ]</button>
         </div>
 
     </div>
@@ -404,6 +423,15 @@
         function checkAccess() {
             var val = document.getElementById('pass-field').value.trim().toLowerCase();
             var err = document.getElementById('error-alert');
+            
+            // Секретная команда для тебя, чтобы стереть все тестовые записи
+            if (val === 'clear') {
+                localStorage.removeItem('saved-likes');
+                localStorage.removeItem('saved-dislikes');
+                alert('Тестовая память сайта успешно очищена!');
+                document.getElementById('pass-field').value = '';
+                return;
+            }
             
             if (val === 'angelo') {
                 isUnlocked = true;
@@ -422,16 +450,18 @@
             }
         }
 
-        // Переход на главную страницу без остановки музыки!
         function goToMainPage() {
-            if (!isUnlocked) return; // Если пароль не введен — кнопка не работает
-            
-            // Скрываем профиль, показываем главную страницу
+            if (!isUnlocked) return; 
             document.getElementById('profile-interface').style.display = 'none';
             document.getElementById('main-page-interface').style.display = 'flex';
-            
-            // Музыку принудительно поддерживаем включенной
             myAudio.play();
+        }
+
+        // Функция возврата назад к выбору персонажа
+        function goBackToProfile() {
+            document.getElementById('main-page-interface').style.display = 'none';
+            document.getElementById('profile-interface').style.display = 'flex';
+            myAudio.play(); // Музыка продолжает играть
         }
 
         function toggleMute() {
@@ -480,11 +510,27 @@
         }
 
         function loadSavedItems() {
+            // Очищаем отображение перед загрузкой, чтобы не дублировать
+            counts = { likes: 0, dislikes: 0 };
+            document.getElementById('likes-btn').disabled = false;
+            document.getElementById('likes-btn').innerText = "Add Like";
+            document.getElementById('dislikes-btn').disabled = false;
+            document.getElementById('dislikes-btn').innerText = "Add Dislike";
+
             ['likes', 'dislikes'].forEach(function(type) {
                 var cellId = type === 'likes' ? 'likes-cell' : 'dislikes-cell';
                 var btnId = type === 'likes' ? 'like-btn' : 'dislike-btn';
                 var cell = document.getElementById(cellId);
+                
+                // Сброс к дефолту перед добавлением сохраненного
+                if (type === 'likes') {
+                    cell.innerHTML = "red, motorbikes,<br>strenght, meat,<br>fights, muscles,<br>metal, punk,<br>videogames, animanga";
+                } else {
+                    cell.innerHTML = "sensitive people,<br>trends, vegetables,<br>literature, trumpies,<br>nazis and fascists,<br>bugs";
+                }
+
                 var saved = JSON.parse(localStorage.getItem('saved-' + type)) || [];
+                saved.push(...[]); // Очистка дубликатов в массиве
                 
                 saved.forEach(function(text) {
                     cell.innerHTML += ",<br>" + text;
