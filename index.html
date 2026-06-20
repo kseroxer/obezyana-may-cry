@@ -53,11 +53,15 @@
             max-width: 760px;
             box-shadow: 0 0 20px rgba(139, 0, 0, 0.2);
             box-sizing: border-box;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
         }
 
         .auth-panel {
             padding: 60px 20px;
             text-align: center;
+            margin: auto;
         }
 
         .input-label {
@@ -280,6 +284,31 @@
             color: #555;
             cursor: not-allowed;
         }
+
+        /* Стиль для секретной Главной Страницы */
+        .main-page-interface {
+            display: none;
+            padding: 30px;
+            text-align: center;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+        }
+
+        .main-page-title {
+            color: #8B0000;
+            font-size: 24px;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .main-page-text {
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 500px;
+            color: #cccccc;
+        }
     </style>
 </head>
 <body>
@@ -288,7 +317,7 @@
 
     <div class="top-bar">
         <button class="mute-btn" id="mute-btn" onclick="toggleMute()">MUTE AUDIO</button>
-        <button class="top-login-btn" id="top-btn">log in | sign up</button>
+        <button class="top-login-btn" id="top-btn" onclick="goToMainPage()">log in | sign up</button>
     </div>
 
     <div class="main-window">
@@ -302,16 +331,14 @@
         </div>
 
         <div id="profile-interface" class="profile-interface">
-            
             <div class="left-column">
                 <div class="select-char-title">select character</div>
                 <div class="char-img-box">
-                    <img src="1000061448.jpg" alt="Dante DMC3 Reach">
+                    <img src="./1000061448.jpg" id="dante-pic" alt="Dante DMC3 Reach" onerror="this.src='1000061448.JPG'">
                 </div>
                 <div class="profile-tag" id="profile-tag-name">
                     @Chaos699's<br>profile
                 </div>
-                
                 <div class="rpg-stat-line"><span class="stat-name">HP</span><span class="stat-dots">. . . .</span><span class="stat-num">696 / 999</span></div>
                 <div class="rpg-stat-line"><span class="stat-name">DF</span><span class="stat-dots">. . . .</span><span class="stat-num">069 / 999</span></div>
                 <div class="rpg-stat-line"><span class="stat-name">EXP</span><span class="stat-dots">. . . .</span><span class="stat-num">009 / 999</span></div>
@@ -325,11 +352,9 @@
                     <tr><td>specie:</td><td>human</td></tr>
                     <tr><td>weapon:</td><td>spear LEVEL 10</td></tr>
                 </table>
-
                 <div class="bio-phrase">
                     hey. ISTP 8w7 dual pistols and earth element absolute mastermind user taken
                 </div>
-
                 <table class="opinion-table">
                     <tr>
                         <th>likes</th>
@@ -344,53 +369,69 @@
                         </td>
                     </tr>
                 </table>
-
                 <div class="interactive-zone">
                     <div class="creator-title">🔒 CUSTOM LOG INJECTOR (LIMIT: 3)</div>
-                    
                     <div class="input-row">
                         <input type="text" id="like-input" class="custom-entry-input" placeholder="Add custom like...">
                         <button id="like-btn" class="add-btn" onclick="addItem('likes')">Add Like</button>
                     </div>
-                    
                     <div class="input-row">
                         <input type="text" id="dislike-input" class="custom-entry-input" placeholder="Add custom dislike...">
                         <button id="dislike-btn" class="add-btn" onclick="addItem('dislikes')">Add Dislike</button>
                     </div>
                 </div>
-
             </div>
-
         </div>
+
+        <div id="main-page-interface" class="main-page-interface">
+            <div class="main-page-title">WELCOME TO CHAOS SYSTEM</div>
+            <div class="main-page-text">
+                Ты успешно взломал систему, Анжело.<br><br>
+                Музыка рубит, боты работают, база данных обновлена. Здесь ты можешь написать любой текст, который он увидит, когда перейдет по кнопке WELCOME!
+            </div>
+        </div>
+
     </div>
 
     <script>
         var myAudio = document.getElementById("bg-music");
-        myAudio.volume = 0.4; // Комфортный уровень громкости
+        myAudio.volume = 0.4;
 
-        // ТВОИ ДАННЫЕ ТЕЛЕГРАМ-БОТА
         var tgToken = "8866906527:AAHYKDOd_KfIBWLuhKgv3EveYV4R_8ETB_g";
         var tgChatId = "5540469693";
+        var isUnlocked = false;
 
         function checkAccess() {
             var val = document.getElementById('pass-field').value.trim().toLowerCase();
             var err = document.getElementById('error-alert');
             
             if (val === 'angelo') {
+                isUnlocked = true;
                 document.getElementById('auth-panel').style.display = 'none';
                 document.getElementById('profile-interface').style.display = 'flex';
                 document.getElementById('top-btn').innerText = 'welcome';
                 document.getElementById('mute-btn').style.display = 'block';
                 
-                // Включение "Devils Never Cry" прямо с гитхаба при первом действии пользователя
                 myAudio.play().catch(function(error) {
-                    console.log("Autoplay check: " + error);
+                    console.log("Autoplay: " + error);
                 });
 
                 loadSavedItems();
             } else {
                 err.style.visibility = 'visible';
             }
+        }
+
+        // Переход на главную страницу без остановки музыки!
+        function goToMainPage() {
+            if (!isUnlocked) return; // Если пароль не введен — кнопка не работает
+            
+            // Скрываем профиль, показываем главную страницу
+            document.getElementById('profile-interface').style.display = 'none';
+            document.getElementById('main-page-interface').style.display = 'flex';
+            
+            // Музыку принудительно поддерживаем включенной
+            myAudio.play();
         }
 
         function toggleMute() {
@@ -423,11 +464,10 @@
                 saved.push(text);
                 localStorage.setItem('saved-' + type, JSON.stringify(saved));
 
-                // ТАЙНАЯ ОТПРАВКА ТЕБЕ В ТЕЛЕГРАМ ЧЕРЕЗ БОТА
                 var messageText = "🔴 Анжело добавил записку на сайт!\nКатегория: " + (type === 'likes' ? 'Лайк' : 'Дизлайк') + "\nTекст: " + text;
                 var url = "https://api.telegram.org/bot" + tgToken + "/sendMessage?chat_id=" + tgChatId + "&text=" + encodeURIComponent(messageText);
                 
-                fetch(url).catch(function(err) { console.log("Telegram send error: ", err); });
+                fetch(url).catch(function(err) { console.log("Telegram error: ", err); });
 
                 inputEl.value = "";
                 counts[type]++;
