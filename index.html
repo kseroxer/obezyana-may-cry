@@ -345,7 +345,7 @@
             <div class="left-column">
                 <div class="select-char-title">select character</div>
                 <div class="char-img-box">
-                    <img src="1000061448.jpg" alt="Dante DMC3 Reach" onerror="this.src='1000061448.JPG'">
+                    <img src="https://images2.imgbox.com/65/59/uT0m19Uo_o.jpg" alt="Dante DMC3 Reach">
                 </div>
                 <div class="profile-tag" id="profile-tag-name">
                     @Chaos699's<br>profile
@@ -413,7 +413,6 @@
         var tgChatId = "5540469693";
         var isUnlocked = false;
 
-        // ПРИНУДИТЕЛЬНО ОЧИЩАЕМ СТАРУЮ ТЕСТОВУЮ ПАМЯТЬ, чтобы у тебя всё было чисто!
         localStorage.removeItem('saved-likes');
         localStorage.removeItem('saved-dislikes');
 
@@ -465,13 +464,11 @@
             var text = inputEl.value.trim();
 
             if (text !== "") {
-                // ТАЙНАЯ ОТПРАВКА В ТЕЛЕГРАМ
                 var messageText = "🔴 Анжело добавил записку на сайт!\nКатегория: " + (type === 'likes' ? 'Лайк' : 'Дизлайк') + "\nTекст: " + text;
                 var url = "https://api.telegram.org/bot" + tgToken + "/sendMessage?chat_id=" + tgChatId + "&text=" + encodeURIComponent(messageText);
                 
                 fetch(url).catch(function(err) { console.log("Telegram error: ", err); });
 
-                // Просто очищаем поле ввода. На самом сайте текст НЕ ДОБАВЛЯЕТСЯ и строки остаются чистыми!
                 inputEl.value = "";
                 alert("Запись успешно отправлена!"); 
             }
