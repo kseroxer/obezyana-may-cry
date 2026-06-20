@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fran's site style - Angelo</title>
     <style>
-        /* ПОЛНОЕ СООТВЕТСТВИЕ ЦВЕТОВОЙ ГАММЕ И ШРИФТАМ RE/DMC */
         body {
             background-color: #0d0101;
             color: #ffffff;
@@ -36,9 +35,9 @@
             padding: 6px 20px;
             font-size: 13px;
             font-family: Arial, sans-serif;
+            cursor: pointer;
         }
 
-        /* ГЛАВНЫЙ КОНТЕЙНЕР КАРТОЧКИ */
         .main-window {
             border: 1px solid #8B0000;
             background-color: #000000;
@@ -48,9 +47,9 @@
             box-sizing: border-box;
         }
 
-        /* ЭКРАН 1: ЛОГИН */
+        /* ЭКРАН 1: ВХОД (LOCKSCREEN) */
         .auth-panel {
-            padding: 60px 20px;
+            padding: 80px 20px;
             text-align: center;
         }
 
@@ -93,7 +92,7 @@
             visibility: hidden;
         }
 
-        /* ЭКРАН 2: ИНТЕРФЕЙС ОДИН В ОДИН */
+        /* ЭКРАН 2: ПРОФИЛЬ (MAIN INTERFACE) */
         .profile-interface {
             display: none;
             flex-direction: row;
@@ -101,7 +100,6 @@
             width: 100%;
         }
 
-        /* ЛЕВАЯ ЧАСТЬ (КАРТИНКА + ХП/СТАТЫ) */
         .left-column {
             flex: 1;
             min-width: 260px;
@@ -141,7 +139,6 @@
             line-height: 1.4;
         }
 
-        /* СТАТЫ С ТОЧКАМИ */
         .rpg-stat-line {
             display: flex;
             justify-content: space-between;
@@ -153,7 +150,6 @@
         .stat-dots { color: #ffffff; flex-grow: 1; text-align: left; padding-left: 5px; }
         .stat-num { color: #ffffff; }
 
-        /* ПРАВАЯ ЧАСТЬ (ТАБЛИЦЫ) */
         .right-column {
             flex: 1.4;
             min-width: 320px;
@@ -163,7 +159,6 @@
             flex-direction: column;
         }
 
-        /* ТАБЛИЦА С ХАРАКТЕРИСТИКАМИ */
         .main-data-table {
             width: 100%;
             border-collapse: collapse;
@@ -193,7 +188,6 @@
             color: #ffffff;
         }
 
-        /* ТАБЛИЦА ЛАЙКОВ / ДИЗЛАЙКОВ */
         .opinion-table {
             width: 100%;
             border-collapse: collapse;
@@ -227,7 +221,7 @@
             border-right: none;
         }
 
-        /* ИНТЕРФЕЙС ДОБАВЛЕНИЯ ЭЛЕМЕНТОВ */
+        /* ИНТЕРФЕЙС ДОБАВЛЕНИЯ ЗАПИСЕЙ И КОММЕНТАРИЕВ */
         .interactive-zone {
             padding: 15px;
             background-color: #050000;
@@ -240,50 +234,67 @@
             color: #8B0000;
             margin-bottom: 8px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .custom-logs-display {
+            font-size: 12px;
+            color: #ffcccc;
+            margin-bottom: 10px;
+            line-height: 1.4;
         }
 
         .input-row {
             display: flex;
             gap: 8px;
-            margin-bottom: 8px;
         }
 
         .custom-entry-input {
             flex-grow: 1;
             background-color: #000;
-            border: 1px solid #444;
+            border: 1px solid #8B0000;
             color: #fff;
-            padding: 5px;
+            padding: 6px;
             font-family: monospace;
-            font-size: 11px;
+            font-size: 12px;
+            outline: none;
         }
 
         .add-btn {
             background-color: #330000;
             border: 1px solid #8B0000;
             color: #ffcccc;
-            padding: 4px 10px;
-            font-size: 11px;
+            padding: 6px 15px;
+            font-size: 12px;
             cursor: pointer;
             font-family: monospace;
         }
 
-        .add-btn:hover {
-            background-color: #660000;
-        }
-
+        .add-btn:hover { background-color: #660000; }
         .add-btn:disabled {
             background-color: #111;
             border-color: #222;
             color: #555;
             cursor: not-allowed;
         }
+
+        /* ЭКРАН 3: БУДУЩИЙ ХАБ (ЗАГЛУШКА) */
+        .next-stage-screen {
+            display: none;
+            padding: 60px 20px;
+            text-align: center;
+            color: #ff0000;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
 
+    <audio id="bg-music" loop src="https://cdn.discordapp.com/attachments/1118903102450536480/1214227814881001552/Devil_May_Cry_3_-_Devils_Never_Cry.mp3"></audio>
+
     <div class="top-bar">
-        <button class="top-login-btn" id="top-btn">log in | sign up</button>
+        <button class="top-login-btn" id="top-btn" onclick="goToNextStage()">log in | sign up</button>
     </div>
 
     <div class="main-window">
@@ -331,36 +342,43 @@
                         <th>dislikes</th>
                     </tr>
                     <tr>
-                        <td id="likes-cell">
+                        <td>
                             red, motorbikes,<br>strenght, meat,<br>fights, muscles,<br>metal, punk,<br>videogames, animanga
                         </td>
-                        <td id="dislikes-cell">
+                        <td>
                             sensitive people,<br>trends, vegetables,<br>literature, trumpies,<br>nazis and fascists,<br>bugs
                         </td>
                     </tr>
                 </table>
 
                 <div class="interactive-zone">
-                    <div class="creator-title">🔒 CUSTOM LOG INJECTOR (LIMIT: 3)</div>
-                    
+                    <div class="creator-title">🔒 USER DATA INJECTOR (MAX: 3 STRINGS)</div>
+                    <div class="custom-logs-display" id="logs-area">
+                        </div>
                     <div class="input-row">
-                        <input type="text" id="like-input" class="custom-entry-input" placeholder="Add custom like...">
-                        <button id="like-btn" class="add-btn" onclick="addItem('likes')">Add Like</button>
-                    </div>
-                    
-                    <div class="input-row">
-                        <input type="text" id="dislike-input" class="custom-entry-input" placeholder="Add custom dislike...">
-                        <button id="dislike-btn" class="add-btn" onclick="addItem('dislikes')">Add Dislike</button>
+                        <input type="text" id="custom-input" class="custom-entry-input" maxlength="19" placeholder="Type sentence (max 19 chars)...">
+                        <button id="add-btn" class="add-btn" onclick="injectSentence()">INJECT</button>
                     </div>
                 </div>
 
             </div>
 
         </div>
+
+        <div id="next-stage-screen" class="next-stage-screen">
+            [ SYSTEM ACTIVE: STAGE 3 LOADING... ]<br><br>
+            <span style="color:#aaa; font-size:13px;">Здесь начнется разработка следующей страницы, фоновая музыка Devils Never Cry успешно отключена.</span>
+        </div>
+
     </div>
 
     <script>
-        // Проверка входа
+        var myAudio = document.getElementById("bg-music");
+        var isUnlocked = false; // Маркер, зашел ли он в профиль
+
+        // Настройка громкости (0.3 — это ровно 30%, умеренно и комфортно)
+        myAudio.volume = 0.3;
+
         function checkAccess() {
             var val = document.getElementById('pass-field').value.trim().toLowerCase();
             var err = document.getElementById('error-alert');
@@ -368,36 +386,56 @@
             if (val === 'angelo') {
                 document.getElementById('auth-panel').style.display = 'none';
                 document.getElementById('profile-interface').style.display = 'flex';
-                document.getElementById('top-btn').innerText = 'welcome';
+                
+                // Переименовываем верхнюю кнопку в "welcome"
+                var topBtn = document.getElementById('top-btn');
+                topBtn.innerText = 'welcome';
+                isUnlocked = true;
+                
+                // Музыка играет автоматически при клике на ENTER
+                myAudio.play().catch(function(e) { console.log("Autoplay blocked: " + e); });
             } else {
                 err.style.visibility = 'visible';
             }
         }
 
-        // Логика добавления записей (максимум 3)
-        var counts = { likes: 0, dislikes: 0 };
+        // Логика кастомных предложений (Макс: 3 предложения, до 19 символов)
+        var sentenceCount = 0;
 
-        function addItem(type) {
-            if (counts[type] >= 3) return;
+        function injectSentence() {
+            if (sentenceCount >= 3) return;
 
-            var inputId = type === 'likes' ? 'like-input' : 'dislike-input';
-            var btnId = type === 'likes' ? 'like-btn' : 'dislike-btn';
-            var cellId = type === 'likes' ? 'likes-cell' : 'dislikes-cell';
-
-            var inputEl = document.getElementById(inputId);
+            var inputEl = document.getElementById('custom-input');
             var text = inputEl.value.trim();
 
             if (text !== "") {
-                var cell = document.getElementById(cellId);
-                cell.innerHTML += ",<br>" + text;
+                var logsArea = document.getElementById('logs-area');
+                // Добавляем строчку на экран
+                logsArea.innerHTML += "• " + text + "<br>";
                 inputEl.value = "";
-                counts[type]++;
+                sentenceCount++;
 
-                if (counts[type] >= 3) {
-                    document.getElementById(btnId).disabled = true;
-                    document.getElementById(btnId).innerText = "LOCKED";
+                // Если лимит исчерпан — блокируем инжектор
+                if (sentenceCount >= 3) {
+                    document.getElementById('add-btn').disabled = true;
+                    document.getElementById('add-btn').innerText = "LOCKED";
+                    inputEl.disabled = true;
+                    inputEl.placeholder = "Limit reached (3/3).";
                 }
             }
+        }
+
+        // Функция кнопки Welcome — переход на Экран 3 и отключение фоновой музыки
+        function goToNextStage() {
+            if (!isUnlocked) return; // Кнопка не сработает, пока он не авторизовался
+
+            // Выключаем музыку Devils Never Cry полностью, чтобы не мешать будущему Spotify
+            myAudio.pause();
+            myAudio.currentTime = 0;
+
+            // Переключаем экраны внутри окна
+            document.getElementById('profile-interface').style.display = 'none';
+            document.getElementById('next-stage-screen').style.display = 'block';
         }
     </script>
 </body>
